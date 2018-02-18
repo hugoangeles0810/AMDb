@@ -24,16 +24,21 @@ package io.github.hugoangeles0810.amdb.data.datasource.rest
 
 import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
 import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
+import io.github.hugoangeles0810.amdb.data.exceptions.NetworkException
+import io.github.hugoangeles0810.amdb.data.exceptions.ServerException
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.TestObserver
 import junit.framework.Assert.*
 import org.junit.Test
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
 class MovieRestDataSourceTest : RestDataSourceTest() {
 
     @Inject
-    protected lateinit var apiService: ApiService
+    lateinit var apiService: ApiService
 
     private lateinit var movieDataSource: MovieDataSource
 
@@ -53,19 +58,59 @@ class MovieRestDataSourceTest : RestDataSourceTest() {
     }
 
     @Test
-    fun testListMovies() {
+    fun shouldRetrieveAListOfMoviesGivenAResponseStatus200() {
         enqueueResponseFromFile("discover_movies_ok.json")
 
         val testObserver = TestObserver<List<Movie>>()
         testObserver.assertNotSubscribed()
 
-        movieDataSource.list().subscribe(testObserver)
+        movieDataSource.list().subscribe({
+            assertNotNull(it)
+            assertTrue(it.isNotEmpty())
+            assertTrue(isFirstExpectedMovie(it.first()))
+        })
+    }
 
-        testObserver
-                .assertSubscribed()
-                .assertNoErrors()
-                .assertValue { it.isNotEmpty() }
-                .assertValue { isFirstExpectedMovie(it.first()) }
+    @Test
+    fun shouldThrowANetworkExceptionGivenATimeout() {
+        // Intentionally no enqueue response
+
+        movieDataSource.list().subscribe(object: Observer<List<Movie>?> {
+            override fun onComplete() {
+            }
+
+            override fun onNext(t: List<Movie>) {
+                fail("Any response is enqueue")
+            }
+
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onError(e: Throwable) {
+                assertTrue(e is NetworkException)
+            }
+        })
+    }
+
+    @Test
+    fun shouldThrowAServerExceptionGivenAResponseStatus500() {
+        enqueueResponse(HttpURLConnection.HTTP_INTERNAL_ERROR)
+
+        movieDataSource.list().subscribe(object: Observer<List<Movie>?> {
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onError(e: Throwable) {
+                assertTrue(e is ServerException)
+            }
+
+            override fun onNext(t: List<Movie>) {
+                fail("A internal server response is enqueue")
+            }
+
+            override fun onComplete() {
+            }
+        })
     }
 
     private fun isFirstExpectedMovie(movie: Movie): Boolean {

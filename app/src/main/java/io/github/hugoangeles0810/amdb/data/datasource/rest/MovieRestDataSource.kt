@@ -22,17 +22,18 @@
 
 package io.github.hugoangeles0810.amdb.data.datasource.rest
 
+import io.github.hugoangeles0810.amdb.data.datasource.BaseRestDataSource
 import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
 import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
 import io.github.hugoangeles0810.amdb.data.mapper.DiscoverMoviesResponseMapper
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
 import io.reactivex.Observable
 
-class MovieRestDataSource(private val apiService: ApiService) : MovieDataSource {
+class MovieRestDataSource(private val apiService: ApiService) : BaseRestDataSource(), MovieDataSource {
 
     override fun list(): Observable<List<Movie>> {
         return apiService.listMovies()
-                .map(DiscoverMoviesResponseMapper()::transform)
-                .toObservable()
+                .lift(parseResult())
+                .map { DiscoverMoviesResponseMapper().transform(it) }
     }
 }

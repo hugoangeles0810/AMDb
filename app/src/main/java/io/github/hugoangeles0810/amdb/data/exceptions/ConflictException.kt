@@ -9,26 +9,17 @@
  * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to
  * do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantia
+ * The above copyright notice and this permission notice shall be included in all copies or substantial
  * portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+ * FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
  * OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
  * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.data.datasource.rest.api
+package io.github.hugoangeles0810.amdb.data.exceptions
 
-import io.github.hugoangeles0810.amdb.data.model.rest.DiscoverMoviesResponse
-import io.reactivex.Observable
-import retrofit2.Response
-import retrofit2.http.GET
-
-interface ApiService {
-
-    @GET("discover/movie")
-    fun listMovies(): Observable<Response<DiscoverMoviesResponse>>
-}
+class ConflictException : Throwable()

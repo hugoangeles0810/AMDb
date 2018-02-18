@@ -55,10 +55,10 @@ abstract class RestDataSourceTest {
         server.shutdown()
     }
 
-    protected fun enqueueResponse(code: Int, body: String, headers: Map<String, String>?) {
+    protected fun enqueueResponse(code: Int, body: String?, headers: Map<String, String>?) {
         val mockResponse = MockResponse()
         mockResponse.setResponseCode(code)
-        mockResponse.setBody(body)
+        mockResponse.setBody(body?:"")
 
         if (headers != null) {
             val headerNames = headers.keys
@@ -68,6 +68,10 @@ abstract class RestDataSourceTest {
         }
 
         server.enqueue(mockResponse)
+    }
+
+    protected fun enqueueResponse(statusCode: Int) {
+        enqueueResponse(statusCode, null, null)
     }
 
     protected fun enqueueResponse(body: String) {
