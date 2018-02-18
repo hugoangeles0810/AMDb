@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -15,6 +17,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "API_KEY", "\"8226d7899f20bb1aae087f3919bbb7f6\""
+            buildConfigField "String", "API_URL", "\"https://api.themoviedb.org/3/\""
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -41,11 +47,14 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     // DI
     implementation 'com.google.dagger:dagger:2.13'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+    kapt 'com.google.dagger:dagger-compiler:2.13'
     // Architecture components
     implementation "android.arch.lifecycle:extensions:1.1.0"
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.8.0'
+    kaptTest 'com.google.dagger:dagger-compiler:2.13'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
