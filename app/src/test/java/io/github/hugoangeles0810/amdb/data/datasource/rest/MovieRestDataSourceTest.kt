@@ -27,10 +27,9 @@ import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
 import io.github.hugoangeles0810.amdb.data.exceptions.NetworkException
 import io.github.hugoangeles0810.amdb.data.exceptions.ServerException
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.TestObserver
-import junit.framework.Assert.*
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotNull
 import org.junit.Test
 import java.net.HttpURLConnection
 import javax.inject.Inject
@@ -60,63 +59,39 @@ class MovieRestDataSourceTest : RestDataSourceTest() {
     @Test
     fun shouldRetrieveAListOfMoviesGivenAResponseStatus200() {
         enqueueResponseFromFile("discover_movies_ok.json")
+        enqueueResponseFromFile("configuration_ok.json")
 
         val testObserver = TestObserver<List<Movie>>()
         testObserver.assertNotSubscribed()
 
-        movieDataSource.list().subscribe({
-            assertNotNull(it)
-            assertTrue(it.isNotEmpty())
-            assertTrue(isFirstExpectedMovie(it.first()))
-        })
+        movieDataSource.list().test()
+                .assertNoErrors()
+                .assertValue {
+                    it.isNotEmpty() && isFirstExpectedMovie(it.first())
+                }
     }
 
     @Test
     fun shouldThrowANetworkExceptionGivenATimeout() {
         // Intentionally no enqueue response
 
-        movieDataSource.list().subscribe(object: Observer<List<Movie>?> {
-            override fun onComplete() {
-            }
-
-            override fun onNext(t: List<Movie>) {
-                fail("Any response is enqueue")
-            }
-
-            override fun onSubscribe(d: Disposable) {
-            }
-
-            override fun onError(e: Throwable) {
-                assertTrue(e is NetworkException)
-            }
-        })
+        movieDataSource.list().test()
+                .assertError(NetworkException::class.java)
     }
 
     @Test
     fun shouldThrowAServerExceptionGivenAResponseStatus500() {
         enqueueResponse(HttpURLConnection.HTTP_INTERNAL_ERROR)
 
-        movieDataSource.list().subscribe(object: Observer<List<Movie>?> {
-            override fun onSubscribe(d: Disposable) {
-            }
-
-            override fun onError(e: Throwable) {
-                assertTrue(e is ServerException)
-            }
-
-            override fun onNext(t: List<Movie>) {
-                fail("A internal server response is enqueue")
-            }
-
-            override fun onComplete() {
-            }
-        })
+        movieDataSource.list().test()
+                .assertError(ServerException::class.java)
     }
 
     private fun isFirstExpectedMovie(movie: Movie): Boolean {
         assertEquals("211672", movie.id)
         assertEquals("Minions", movie.title)
-        assertEquals("/q0R4crx2SehcEEQEkYObktdeFy.jpg", movie.posterUrl)
+        assertEquals("http://image.tmdb.org/t/p/w342/q0R4crx2SehcEEQEkYObktdeFy.jpg", movie.posterUrl)
+        assertEquals("http://image.tmdb.org/t/p/w780/qLmdjn2fv0FV2Mh4NBzMArdA0Uu.jpg", movie.backdropUrl)
         return true
     }
 }

@@ -45,5 +45,7 @@ data class MovieItemResponse(
         @SerializedName("popularity")
         val popularity: Double,
         @SerializedName("poster_path")
-        val posterPath: String? = null
+        val posterPath: String? = null,
+        @SerializedName("backdrop_path")
+        val backdropPath: String? = null
 )

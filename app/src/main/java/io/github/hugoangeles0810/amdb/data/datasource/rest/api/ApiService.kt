@@ -22,6 +22,7 @@
 
 package io.github.hugoangeles0810.amdb.data.datasource.rest.api
 
+import io.github.hugoangeles0810.amdb.data.model.rest.Configuration
 import io.github.hugoangeles0810.amdb.data.model.rest.DiscoverMoviesResponse
 import io.reactivex.Observable
 import retrofit2.Response
@@ -31,4 +32,7 @@ interface ApiService {
 
     @GET("discover/movie")
     fun listMovies(): Observable<Response<DiscoverMoviesResponse>>
+
+    @GET("configuration")
+    fun getConfiguration(): Observable<Response<Configuration>>
 }

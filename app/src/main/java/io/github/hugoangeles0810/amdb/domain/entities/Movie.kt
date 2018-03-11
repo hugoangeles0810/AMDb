@@ -27,5 +27,6 @@ data class Movie(
         val title: String,
         val overview: String,
         val popularity: Double,
-        val posterUrl: String?
+        val posterUrl: String?,
+        val backdropUrl: String?
 )

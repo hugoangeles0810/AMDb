@@ -26,14 +26,23 @@ import io.github.hugoangeles0810.amdb.data.datasource.BaseRestDataSource
 import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
 import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
 import io.github.hugoangeles0810.amdb.data.mapper.DiscoverMoviesResponseMapper
+import io.github.hugoangeles0810.amdb.data.model.rest.Configuration
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 
 class MovieRestDataSource(private val apiService: ApiService) : BaseRestDataSource(), MovieDataSource {
 
     override fun list(): Observable<List<Movie>> {
-        return apiService.listMovies()
-                .lift(parseResult())
-                .map { DiscoverMoviesResponseMapper().transform(it) }
+        return Observable.zip(
+                apiService.listMovies().lift(parseResult()).map { DiscoverMoviesResponseMapper().transform(it) },
+                apiService.getConfiguration().lift(parseResult()), BiFunction { movies: List<Movie>, configuration: Configuration ->
+                    movies.map {
+                        it.copy(
+                                posterUrl = configuration.imageConfig.baseUrl + configuration.imageConfig.posterSizes[3] + it.posterUrl,
+                                backdropUrl = configuration.imageConfig.baseUrl + configuration.imageConfig.backdropSizes[1] + it.backdropUrl
+                        )
+                    }
+                })
     }
 }

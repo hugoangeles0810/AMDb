@@ -56,7 +56,7 @@ class RVMoviesAdapter : RecyclerView.Adapter<RVMoviesAdapter.ViewHolder>() {
         fun bindView(movie: Movie) {
             with(movie) {
                 val imageView = itemView as AppCompatImageView
-                imageView.load("https://image.tmdb.org/t/p/w342${movie.posterUrl}")
+                imageView.load(movie.posterUrl)
             }
         }
     }

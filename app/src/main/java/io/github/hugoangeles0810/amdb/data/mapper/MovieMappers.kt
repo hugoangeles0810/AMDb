@@ -42,7 +42,8 @@ class MovieItemResponseMapper {
                 itemResponse.title,
                 itemResponse.overview,
                 itemResponse.popularity,
-                itemResponse.posterPath
+                itemResponse.posterPath,
+                itemResponse.backdropPath
         )
     }
 }

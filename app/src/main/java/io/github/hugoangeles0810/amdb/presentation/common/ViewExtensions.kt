@@ -33,7 +33,7 @@ fun ViewGroup.inflate(@LayoutRes layout: Int, attachToRoot: Boolean = false): Vi
     return LayoutInflater.from(this.context).inflate(layout, this, attachToRoot)
 }
 
-fun AppCompatImageView.load(url: String) {
+fun AppCompatImageView.load(url: String?) {
     Glide.with(this)
             .load(url)
             .into(this)
