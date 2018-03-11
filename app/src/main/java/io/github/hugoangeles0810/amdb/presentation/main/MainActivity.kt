@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
 import io.github.hugoangeles0810.amdb.DaggerAppComponent
 import io.github.hugoangeles0810.amdb.R
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
@@ -26,27 +25,27 @@ class MainActivity : AppCompatActivity() {
 
         DaggerAppComponent.builder().build().injectTo(this)
 
+
+        val adapter = RVMoviesAdapter()
+        rvMovies.adapter = adapter
+
         moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
         moviesViewModel.moviesDataState.observe(this, Observer {
             when (it) {
                 is DataState.Loading -> {
-                    tvContent.text = ""
+                    adapter.data = emptyList()
                     progressBar.visibility = View.VISIBLE
                 }
                 is DataState.Error -> {
-                    tvContent.text = ""
+                    adapter.data = emptyList()
                     progressBar.visibility = View.GONE
                 }
                 is DataState.Complete<List<Movie>> -> {
-                    tvContent.text = it.toString()
+                    adapter.data = it.result
                     progressBar.visibility = View.GONE
                 }
             }
         })
-
-        btnLoadMovies.setOnClickListener {
-            moviesViewModel.loadMovies(forceLoad = true)
-        }
 
         moviesViewModel.loadMovies()
 
