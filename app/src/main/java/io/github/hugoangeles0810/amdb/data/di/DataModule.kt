@@ -20,6 +20,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.domain.interactors
+package io.github.hugoangeles0810.amdb.data.di
 
-interface BaseCallback
+import dagger.Module
+import dagger.Provides
+import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
+import io.github.hugoangeles0810.amdb.data.datasource.rest.MovieRestDataSource
+import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
+
+@Module
+class DataModule {
+
+    @Provides
+    fun providesMoviesDataSource(apiService: ApiService): MovieDataSource {
+        return MovieRestDataSource(apiService)
+    }
+}

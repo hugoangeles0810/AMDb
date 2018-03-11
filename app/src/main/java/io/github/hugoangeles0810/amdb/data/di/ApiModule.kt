@@ -28,13 +28,13 @@ import dagger.Module
 import dagger.Provides
 import io.github.hugoangeles0810.amdb.BuildConfig
 import io.github.hugoangeles0810.amdb.data.datasource.rest.api.ApiService
-import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+
 
 @Module
 open class ApiModule {
@@ -63,6 +63,14 @@ open class ApiModule {
     @Provides
     fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+                .addInterceptor {
+                    val url = it.request().url()
+                            .newBuilder()
+                            .addQueryParameter("api_key", "8226d7899f20bb1aae087f3919bbb7f6")
+                            .build()
+                    val newRequest = it.request().newBuilder().url(url).build()
+                    it.proceed(newRequest)
+                }
                 .addInterceptor(loggingInterceptor)
                 .build()
     }

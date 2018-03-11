@@ -20,11 +20,24 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.domain.interactors
+package io.github.hugoangeles0810.amdb.presentation.di
 
-import io.reactivex.disposables.Disposable
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import dagger.Binds
+import dagger.Module
+import dagger.multibindings.IntoMap
+import io.github.hugoangeles0810.amdb.presentation.main.MoviesViewModel
 
-interface BaseInteractor<in Callback : BaseCallback, in Params> {
 
-    fun execute(callback: Callback, params: Params): Disposable
+@Module
+abstract class ViewModelFactoryModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MoviesViewModel::class)
+    abstract fun bindsMoviesViewModel(moviesViewModel: MoviesViewModel): ViewModel
+
+    @Binds
+    internal abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
 }

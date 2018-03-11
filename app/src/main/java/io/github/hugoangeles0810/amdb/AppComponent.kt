@@ -24,6 +24,7 @@ package io.github.hugoangeles0810.amdb
 
 import dagger.Component
 import io.github.hugoangeles0810.amdb.data.di.ApiModule
+import io.github.hugoangeles0810.amdb.presentation.main.MainActivity
 import javax.inject.Singleton
 
 @Singleton
@@ -31,4 +32,6 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun injectTo(app: AMDbApp)
+
+    fun injectTo(activity: MainActivity)
 }

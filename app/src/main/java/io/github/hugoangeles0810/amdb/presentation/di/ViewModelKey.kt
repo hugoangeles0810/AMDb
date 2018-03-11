@@ -20,10 +20,12 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.domain.interactors
+package io.github.hugoangeles0810.amdb.presentation.di
 
-import io.reactivex.Scheduler
+import android.arch.lifecycle.ViewModel
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-abstract class AbstractInteractor<Callback : BaseCallback, in Params>(protected val subscribeScheduler: Scheduler,
-                                                                      protected val observeScheduler: Scheduler) : BaseInteractor<Callback, Params> {
-}
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
+@MapKey
+internal annotation class ViewModelKey(val value: KClass<out ViewModel>)

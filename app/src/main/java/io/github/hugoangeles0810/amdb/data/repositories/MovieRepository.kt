@@ -25,8 +25,10 @@ package io.github.hugoangeles0810.amdb.data.repositories
 import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class MovieRepository(private val movieDataSource: MovieDataSource) {
+class MovieRepository
+    @Inject constructor(private val movieDataSource: MovieDataSource) {
 
     fun listMovies(): Observable<List<Movie>> {
         return movieDataSource.list()

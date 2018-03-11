@@ -25,9 +25,12 @@ package io.github.hugoangeles0810.amdb
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.github.hugoangeles0810.amdb.data.di.ApiModule
+import io.github.hugoangeles0810.amdb.data.di.DataModule
+import io.github.hugoangeles0810.amdb.presentation.di.ViewModelFactoryModule
 import javax.inject.Singleton
 
-@Module
+@Module(includes = arrayOf(ViewModelFactoryModule::class, DataModule::class, ApiModule::class))
 class AppModule(private val app: AMDbApp) {
 
     @Singleton
@@ -37,4 +40,6 @@ class AppModule(private val app: AMDbApp) {
     @Singleton
     @Provides
     fun providesApplication(): AMDbApp = app
+
+
 }

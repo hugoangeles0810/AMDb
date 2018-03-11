@@ -20,17 +20,13 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.domain.interactors
+package io.github.hugoangeles0810.amdb.presentation.common
 
-import io.github.hugoangeles0810.amdb.data.repositories.MovieRepository
-import io.github.hugoangeles0810.amdb.domain.entities.Movie
-import io.reactivex.Observable
-import javax.inject.Inject
+sealed class DataState<T> {
 
-class ListMoviesInteractor
-    @Inject constructor(private val movieRepository: MovieRepository) {
+    class Loading<T> : DataState<T>()
 
-    fun execute(): Observable<List<Movie>> {
-        return movieRepository.listMovies()
-    }
+    class Error<T>(val error: String): DataState<T>()
+
+    class Complete<T>(val result: T): DataState<T>()
 }
