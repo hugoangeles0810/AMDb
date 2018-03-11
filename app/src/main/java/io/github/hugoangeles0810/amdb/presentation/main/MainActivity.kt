@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         DaggerAppComponent.builder().build().injectTo(this)
 
+        setSupportActionBar(toolbar)
 
         val adapter = RVMoviesAdapter()
         rvMovies.adapter = adapter
