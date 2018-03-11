@@ -39,6 +39,11 @@ import javax.inject.Singleton
 @Module
 open class ApiModule {
 
+    companion object {
+        private const val API_KEY_QUERY = "api_key"
+    }
+
+
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -66,7 +71,7 @@ open class ApiModule {
                 .addInterceptor {
                     val url = it.request().url()
                             .newBuilder()
-                            .addQueryParameter("api_key", "8226d7899f20bb1aae087f3919bbb7f6")
+                            .addQueryParameter(API_KEY_QUERY, BuildConfig.API_KEY)
                             .build()
                     val newRequest = it.request().newBuilder().url(url).build()
                     it.proceed(newRequest)
