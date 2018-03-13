@@ -22,15 +22,6 @@
 
 package io.github.hugoangeles0810.amdb.domain.interactors
 
-import io.github.hugoangeles0810.amdb.data.repositories.MovieRepository
-import io.github.hugoangeles0810.amdb.domain.entities.Movie
-import io.reactivex.Observable
-import javax.inject.Inject
-
-class ListMoviesInteractor
-    @Inject constructor(private val movieRepository: MovieRepository) {
-
-    fun execute(): Observable<List<Movie>> {
-        return movieRepository.listMovies()
-    }
+interface Interactor<Params, T> {
+    fun execute(params: Params? = null): T
 }
