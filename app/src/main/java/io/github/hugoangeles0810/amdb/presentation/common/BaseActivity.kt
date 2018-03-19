@@ -20,16 +20,14 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.data.di
+package io.github.hugoangeles0810.amdb.presentation.common
 
-import dagger.Module
-import dagger.Provides
-import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
-import io.github.hugoangeles0810.amdb.data.datasource.rest.MovieRestDataSource
+import android.arch.lifecycle.ViewModelProvider
+import android.support.v7.app.AppCompatActivity
+import javax.inject.Inject
 
-@Module
-class DataModule {
+abstract class BaseActivity : AppCompatActivity() {
 
-    @Provides
-    fun providesMoviesDataSource(impl: MovieRestDataSource): MovieDataSource = impl
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 }

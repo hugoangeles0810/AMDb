@@ -30,8 +30,10 @@ import io.github.hugoangeles0810.amdb.data.model.rest.Configuration
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import javax.inject.Inject
 
-class MovieRestDataSource(private val apiService: ApiService) : BaseRestDataSource(), MovieDataSource {
+class MovieRestDataSource
+  @Inject constructor(private val apiService: ApiService) : BaseRestDataSource(), MovieDataSource {
 
     override fun list(): Observable<List<Movie>> {
         return Observable.zip(

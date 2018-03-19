@@ -1,23 +1,19 @@
 package io.github.hugoangeles0810.amdb.presentation.main
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import io.github.hugoangeles0810.amdb.DaggerAppComponent
 import io.github.hugoangeles0810.amdb.R
 import io.github.hugoangeles0810.amdb.domain.entities.Movie
+import io.github.hugoangeles0810.amdb.presentation.common.BaseActivity
 import io.github.hugoangeles0810.amdb.presentation.common.DataState
+import io.github.hugoangeles0810.amdb.presentation.common.getViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var moviesViewModel: MoviesViewModel
+    private lateinit var moviesViewModel: MoviesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = RVMoviesAdapter()
         rvMovies.adapter = adapter
 
-        moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
+        moviesViewModel = getViewModel()
         moviesViewModel.moviesDataState.observe(this, Observer {
             when (it) {
                 is DataState.Loading -> {

@@ -20,16 +20,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package io.github.hugoangeles0810.amdb.data.di
+package io.github.hugoangeles0810.amdb.presentation.common
 
-import dagger.Module
-import dagger.Provides
-import io.github.hugoangeles0810.amdb.data.datasource.MovieDataSource
-import io.github.hugoangeles0810.amdb.data.datasource.rest.MovieRestDataSource
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 
-@Module
-class DataModule {
-
-    @Provides
-    fun providesMoviesDataSource(impl: MovieRestDataSource): MovieDataSource = impl
+inline fun <reified T: ViewModel> BaseActivity.getViewModel(): T {
+    return ViewModelProviders.of(this, viewModelFactory)[T::class.java]
 }
